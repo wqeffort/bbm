@@ -2,20 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Response;
 // 加载Model
 use App\Model\User;
 use App\Model\admin;
 use App\Model\log_login;
 use App\Model\join;
-use Log;
-
 
 class IndexController extends Controller
 {
@@ -24,19 +17,21 @@ class IndexController extends Controller
     {
         if (session('admin')) {
             $admin = session('admin');
+
             return view('admin.home', compact('admin'));
-        }else{
-            $common = new Controller;
+        } else {
+            $common = new Controller();
             // 生成登录的Key
             $key = $common->key();
             // 储存Key进行中转
-            $logLogin = new log_login;
+            $logLogin = new log_login();
             $logLogin->key = $key;
             if ($logLogin->save()) {
                 // 生成独立二维码
                 $qrcode = $common->makeQrcode('http://'.env('HTTP_HOST').'/admin/login/'.$key);
-                return view('admin.login',compact('qrcode','key'));
-            }else{
+
+                return view('admin.login', compact('qrcode', 'key'));
+            } else {
                 dd('生成登录Key失败!');
             }
         }
@@ -46,89 +41,84 @@ class IndexController extends Controller
     {
         // 检查是否存在登录状态
         if (session('admin')) {
-            $result = $this->result('success','正常!');
-        }else{
-            $result = $this->result('fail','登录过期!');
+            $result = $this->result('success', '正常!');
+        } else {
+            $result = $this->result('fail', '登录过期!');
         }
+
         return $result;
     }
+
     public function info()
     {
         $userAll = User::get();
-        $memberAll = User::where('user_rank','>','0')->get()->count();
-        $joinAll = join::where('protocol','1')->get()->count();
-        $springAll = join::where('protocol','2')->get()->count();
-        $rank_2 = User::where('user_rank','2')->get()->count();
-        $rank_3 = User::where('user_rank','3')->get()->count();
-        $rank_4 = User::where('user_rank','4')->get()->count();
-        $rank_5 = User::where('user_rank','5')->get()->count();
-        return view('admin.info',compact('userAll','memberAll','joinAll','springAll','rank_2','rank_3','rank_4','rank_5'));
+        $memberAll = User::where('user_rank', '>', '0')->get()->count();
+        $joinAll = join::where('protocol', '1')->get()->count();
+        $springAll = join::where('protocol', '2')->get()->count();
+        $rank_2 = User::where('user_rank', '2')->get()->count();
+        $rank_3 = User::where('user_rank', '3')->get()->count();
+        $rank_4 = User::where('user_rank', '4')->get()->count();
+        $rank_5 = User::where('user_rank', '5')->get()->count();
+
+        return view('admin.info', compact('userAll', 'memberAll', 'joinAll', 'springAll', 'rank_2', 'rank_3', 'rank_4', 'rank_5'));
     }
 
     public function login($key)
     {
         $input = Input::all();
-        $common = new Controller;
+        $common = new Controller();
         if (session('user') == '') {
             return redirect('/');
-        }else{
+        } else {
             // 轮询验证Key和登录身份
             // 验证用户是否是管理员身份
-            if (admin::where('uuid',session('user')->user_uuid)
-                ->where('status','1')
+            if (admin::where('uuid', session('user')->user_uuid)
+                ->where('status', '1')
                 ->first()) {
-                if (log_login::where('key',$key)->update(['uuid'=>session('user')->user_uuid,'status'=>'1'])) {
-                    $result = $common->result('status','授权登录成功!','');
-                }else{
-                    $result = $common->result('fail','ERROR!未成功写入登录日志,请重新再试!','');
+                if (log_login::where('key', $key)->update(['uuid' => session('user')->user_uuid, 'status' => '1'])) {
+                    $result = $common->result('status', '授权登录成功!', '');
+                } else {
+                    $result = $common->result('fail', 'ERROR!未成功写入登录日志,请重新再试!', '');
                 }
-            }else{
-                $result = $common->result('fail','您没有管理权限,请勿重复挑衅!','');
+            } else {
+                $result = $common->result('fail', '您没有管理权限,请勿重复挑衅!', '');
             }
+
             return $result;
         }
     }
 
     public function loginAuth($key)
     {
-        $common = new Controller;
-        $loginInfo = log_login::where('key',$key)
-            ->where('status','1')
+        $common = new Controller();
+        $loginInfo = log_login::where('key', $key)
+            ->where('status', '1')
             ->first();
         if ($loginInfo) {
-            $admin = admin::where('admin.uuid',$loginInfo->uuid)
-                ->leftJoin('user','user.user_uuid','=','admin.uuid')
-                ->where('admin.status','1')
-                ->where('user.status','1')
+            $admin = admin::where('admin.uuid', $loginInfo->uuid)
+                ->leftJoin('user', 'user.user_uuid', '=', 'admin.uuid')
+                ->where('admin.status', '1')
+                ->where('user.status', '1')
                 ->first();
             if ($admin) {
-                session(['admin'=>$admin]);
-                $result = $common->result('success','登录成功','admin');
-            }else{
-                $result = $common->result('fail','登录失败,请稍后再试','');
+                session(['admin' => $admin]);
+                $result = $common->result('success', '登录成功', 'admin');
+            } else {
+                $result = $common->result('fail', '登录失败,请稍后再试', '');
             }
-        }else{
-            $result = $common->result('fail','未轮询到登录结果,继续轮询!','');
+        } else {
+            $result = $common->result('fail', '未轮询到登录结果,继续轮询!', '');
         }
+
         return $result;
     }
 
     public function loginOut()
     {
-        $common = new Controller;
-        session(['admin'=>'']);
-        $result = $common->result('success','注销成功,正在为您跳转!','');
+        $common = new Controller();
+        session(['admin' => '']);
+        $result = $common->result('success', '注销成功,正在为您跳转!', '');
+
         return $result;
-
     }
-
-
-
-
-
-
-
-
-
-
 }
