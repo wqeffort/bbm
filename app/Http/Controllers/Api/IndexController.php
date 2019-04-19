@@ -32,6 +32,13 @@ class IndexController extends Controller
         return $result;
     }
 
+    /**
+     * 判断商城是否显示.
+     *
+     *	@author wqeffort <wqeffort@sina.com>
+     *
+     * @return bool
+     */
     public function isDisplayMall()
     {
         // 获取配置信息
