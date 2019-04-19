@@ -47,7 +47,9 @@ Route::group(['middleware' => ['api']], function () {
 
 // 登录注册接口
 Route::group(['middleware' => ['api']], function () {
+    //用户登录
     Route::post('login', 'Api\IndexController@login');
+    //用户注册
     Route::post('register', 'Api\IndexController@register');
     // 补全用户信息
     Route::post('register/user/info', 'Api\IndexController@setUserInfo');
