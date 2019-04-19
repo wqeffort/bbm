@@ -44,7 +44,7 @@
                     <tr>
                         <th>缩略图:</th>
                         <td style="background: #EEE;">
-                            <img src="{{ url($ad->img) }}" alt="" id="art_thumb_img" style="height: 175px">
+                            <img src="{{ url($ad->img) }}" alt="" id="art_thumb_img" style="width:640px;height:312px;">
                         </td>
                     </tr>
                     <tr>

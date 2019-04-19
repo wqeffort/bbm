@@ -38,7 +38,7 @@
                         @foreach ($ad as $value)
                         <tr>
                             <td class="tc">{{ $value->id }}</td>
-                            <td class="tc"><img style="height: 3rem" src="{{ asset($value->img) }}"></td>
+                            <td class="tc"><img src="{{ asset($value->img) }}"></td>
                             <td class="tc">{{ $value->alt }}</td>
                             <td class="tc">{{ $value->url }}</td>
                             <td class="tc">{{ $value->title }}</td>
