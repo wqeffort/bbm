@@ -16,7 +16,8 @@ class VerifyCsrfToken extends Middleware
         'paymentCallBack',
         'admin/search',
         'wechatpayNotify',
-        'notify/wechat'
+        'notify/wechat',
+        'admin/search/phone',
         // 'admin/goods/create'
     ];
 }

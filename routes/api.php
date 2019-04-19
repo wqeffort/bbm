@@ -17,10 +17,9 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
-
 // 公用接口
 Route::group(['middleware' => ['api']], function () {
-	Route::any('sms/send', 'Api\IndexController@sms');
+    Route::any('sms/send', 'Api\IndexController@sms');
     Route::any('sms/send/content', 'Api\IndexController@smsContent');
     // 第一次注册时候验证首次发送短信
     Route::any('sms/send/one', 'Api\IndexController@oneSendSms');
@@ -33,6 +32,7 @@ Route::group(['middleware' => ['api']], function () {
 
     // 版本迭代检查
     Route::post('version/info', 'Api\IndexController@version');
+    Route::post('version/isdisplaymall', 'Api\IndexController@isDisplayMall');
 });
 
 // 高德定位
@@ -47,15 +47,13 @@ Route::group(['middleware' => ['api']], function () {
 
 // 登录注册接口
 Route::group(['middleware' => ['api']], function () {
-    Route::post('login','Api\IndexController@login');
-    Route::post('register','Api\IndexController@register');
+    Route::post('login', 'Api\IndexController@login');
+    Route::post('register', 'Api\IndexController@register');
     // 补全用户信息
     Route::post('register/user/info', 'Api\IndexController@setUserInfo');
     // 获取到个人信息
     Route::post('user/info/view', 'Api\IndexController@viewUserInfo');
 });
-
-
 
 // IM集合
 Route::group(['middleware' => ['api']], function () {
@@ -68,7 +66,6 @@ Route::group(['middleware' => ['api']], function () {
     // 添加备注
     Route::post('chat/user/mark/edit', 'Api\Chat\JachatController@mark');
 });
-
 
 // 社区集合
 Route::group(['middleware' => ['api']], function () {
@@ -111,7 +108,7 @@ Route::group(['middleware' => ['api']], function () {
 });
 
 // 个人中心信息设置集合
-Route::group(['middleware' => ['api']], function() {
+Route::group(['middleware' => ['api']], function () {
     // 设置昵称
     Route::post('user/info/set/setNickname', 'Api\UserController@setNickname');
     // 设置登录密码
@@ -135,7 +132,7 @@ Route::group(['middleware' => ['api']], function() {
 });
 
 // 商城API集合
-Route::group(['middleware' => ['api']], function() {
+Route::group(['middleware' => ['api']], function () {
     // 获取商城主页数据
     Route::post('shop/data', 'Api\StoreController@index');
     // 获取商品详情页信息
@@ -159,7 +156,6 @@ Route::group(['middleware' => ['api']], function() {
     // 支付结果查询
     Route::post('shop/order/select', 'Api\Store\OrderController@selectOrder');
 
-
     // 获取收货地址
     Route::post('shop/ads', 'Api\Store\AdsController@ads');
     // 获取默认收货地址
@@ -175,13 +171,12 @@ Route::group(['middleware' => ['api']], function() {
     // 删除收货地址
     Route::post('shop/ads/del', 'Api\Store\AdsController@adsDel');
 
-
     // 获取用户所有订单
     Route::post('shop/order/get/all', 'Api\Store\OrderController@all');
     // 用户收货后确认订单
     Route::post('shop/order/agree', 'Api\Store\OrderController@agree');
     // 物流信息查询
-    Route::post('shop/order/express','Api\Store\OrderController@orderExpress');
+    Route::post('shop/order/express', 'Api\Store\OrderController@orderExpress');
 
     // 列表接口
     // 搜索获取商品
@@ -196,17 +191,14 @@ Route::group(['middleware' => ['api']], function() {
     Route::post('shop/goods/collection/add', 'Api\Store\GoodsController@collectionAdd');
     Route::post('shop/goods/collection/del', 'Api\Store\GoodsController@collectionDel');
 
-
     // 获取文章资讯
     // 获取文章banner
     Route::post('shop/article', 'Api\Store\ArticleController@index');
     Route::post('shop/article/get', 'Api\Store\ArticleController@article');
 });
 
-
 // 推送集合
 Route::group(['middleware' => ['api']], function () {
     // 推送
     Route::post('push', 'Api\JPushController@push');
-
 });
